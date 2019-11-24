@@ -26,7 +26,7 @@ import tflex_sgdr
 import pytz
 from datetime import datetime, timezone
 
-CHECKPOINT_DIR = 'checkpoint'
+CHECKPOINT_DIR = 'drive/My Drive/checkpoint'
 SAMPLE_DIR = 'samples'
 
 
@@ -307,7 +307,7 @@ def main():
         summaries = tf.summary.merge([summary_lr, summary_loss])
 
         summary_log = tf.summary.FileWriter(
-            os.path.join(CHECKPOINT_DIR, args.run_name))
+            os.path.join(os.pardir, CHECKPOINT_DIR, args.run_name))
 
         if args.save_graph:
             summary_log.add_graph(tf.get_default_graph())
@@ -321,7 +321,7 @@ def main():
 
         if args.restore_from == 'latest':
             ckpt = tflex.latest_checkpoint(
-                os.path.join(CHECKPOINT_DIR, args.run_name))
+                os.path.join(os.pardir, CHECKPOINT_DIR, args.run_name))
             if ckpt is None:
                 # Get fresh GPT weights if new run.
                 ckpt = tflex.latest_checkpoint(
@@ -360,7 +360,7 @@ def main():
 
         print('Training...')
         counter = 1
-        counter_path = os.path.join(CHECKPOINT_DIR, args.run_name, 'counter')
+        counter_path = os.path.join(os.pardir, CHECKPOINT_DIR, args.run_name, 'counter')
         if os.path.exists(counter_path):
             # Load the step number if we're resuming a run
             # Add 1 so we don't immediately try to save again
@@ -369,15 +369,15 @@ def main():
 
         @tflex.register_command
         def save():
-            maketree(os.path.join(CHECKPOINT_DIR, args.run_name))
+            maketree(os.path.join(os.pardir, CHECKPOINT_DIR, args.run_name))
             print(
                 'Saving',
-                os.path.join(CHECKPOINT_DIR, args.run_name,
+                os.path.join(os.pardir, CHECKPOINT_DIR, args.run_name,
                              'model-{}').format(counter))
             t0 = time.time()
             saver.save(
                 sess,
-                os.path.join(CHECKPOINT_DIR, args.run_name, 'model'),
+                os.path.join(os.pardir, CHECKPOINT_DIR, args.run_name, 'model'),
                 global_step=counter)
             t1 = time.time()
             print('Saved in %f seconds' % (t1 - t0))
