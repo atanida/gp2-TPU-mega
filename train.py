@@ -34,6 +34,7 @@ parser = argparse.ArgumentParser(
     description='Fine-tune GPT-2 on your custom dataset.',
     formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 
+parser.add_argument('--topic', metavar='TOPIC', type=str, default='Holden: You’re in a desert walking along in the sand when all of the sudden you look down.', help='Topic of the samples.')
 parser.add_argument('--dataset', metavar='PATH', type=str, required=True, help='Input file, directory, or glob pattern (utf-8 text, or preencoded .npz files).')
 parser.add_argument('--model_name', metavar='MODEL', type=str, default='117M', help='Pretrained model name')
 parser.add_argument('--combine', metavar='CHARS', type=int, default=50000, help='Concatenate input files with <|endoftext|> separator into chunks of this minimum size')
@@ -387,7 +388,8 @@ def main():
         @tflex.register_command
         def generate_samples():
             print('Generating samples...')
-            context_tokens = data_sampler.sample(1)
+            #context_tokens = data_sampler.sample(1)
+            context_tokens = enc.encode(args.topic)
             all_text = []
             index = 0
             while index < args.sample_num:
