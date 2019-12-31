@@ -80,8 +80,7 @@ def sample_sequence(*, hparams, length, start_token=None, batch_size=None, conte
         def body(past, prev, output):
             next_outputs = step(hparams, prev[:, tf.newaxis], past=past)
             logits = next_outputs['logits'][:, -1, :]  / tf.to_float(temperature)
-            if penalize > 0.0:
-                logits = penalize_used(logits, output, penalize=penalize)
+            logits = penalize_used(logits, output, penalize=penalize)
             if top_p > 0.0:
                 logits = top_p_logits(logits, p=top_p, epsilon=epsilon)
             else:
