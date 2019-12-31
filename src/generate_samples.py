@@ -14,6 +14,8 @@ import model, sample, encoder
 
 import tflex
 
+CHECKPOINT_DIR = 'drive/My Drive/checkpoint'
+
 @tflex.register_command
 def clear_context():
   tflex.reset_context()
@@ -96,7 +98,9 @@ def interact_model(
         )
 
         saver = tflex.Saver()
-        ckpt = tflex.latest_checkpoint(os.path.join('models', model_name))
+        ckpt = tflex.latest_checkpoint(
+                os.path.join(os.pardir, CHECKPOINT_DIR, "run1"))
+        #ckpt = tflex.latest_checkpoint(os.path.join('models', model_name))
         saver.restore(sess, ckpt)
 
         while True:
