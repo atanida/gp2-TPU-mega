@@ -34,7 +34,7 @@ def is_ascii(s):
     return all(ord(c) < 128 for c in s)
 
 def interact_model(
-    model_name='117M',
+    model_name='1558M',
     seed=None,
     nsamples=1,
     step=1,
