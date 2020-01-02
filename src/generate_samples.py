@@ -141,6 +141,8 @@ def interact_model(
                   result, *rest = text.split(clear)
                 sys.stdout.write(result)
                 sys.stdout.flush()
+                with open(os.path.join(os.pardir, CHECKPOINT_DIR, "log.txt"), 'a') as f:
+                  f.write(result)
                 tflex.context_text += text
                 tflex.context_count += len(tflex.backlog)
                 def reset_context():
