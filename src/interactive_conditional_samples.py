@@ -24,8 +24,8 @@ def interact_model(
     temperature=1,
     top_k=0,
     top_p=0.0,
-    prompt=None,
-    strip=False
+    penalize=0,
+    prompt=None
 ):
     """
     Interactively run the model
@@ -46,6 +46,9 @@ def interact_model(
      special setting meaning no restrictions. 40 generally is a good value.
     :top_p=0.0 : Float value controlling diversity. Implements nucleus sampling,
      overriding top_k if set to a value > 0. A good setting is 0.9.
+    :penalize=0.0 : Float value controlling "used" penalty. Implements repetition
+     reduction (similar to CTRL) if set to a value > 0. A decent setting might be 0.85
+     with temperature 0.3 and top_k 40.
     """
     if batch_size is None:
         batch_size = 1
@@ -69,7 +72,7 @@ def interact_model(
             hparams=hparams, length=length,
             context=context,
             batch_size=batch_size,
-            temperature=temperature, top_k=top_k, top_p=top_p
+            temperature=temperature, top_k=top_k, top_p=top_p, penalize=penalize
         )
 
         saver = tflex.Saver()
@@ -89,8 +92,8 @@ def interact_model(
                 raw_text = input("Model prompt >>> ")
                 if not raw_text:
                     raw_text="\n"
-            if strip:
-                raw_text = raw_text.rstrip()
+            if len(raw_text) > 1 and raw_text.endswith('\n'):
+                raw_text = raw_text[:-1]
             print('Prompt:', repr(raw_text))
             context_tokens = enc.encode(raw_text)
             generated = 0
