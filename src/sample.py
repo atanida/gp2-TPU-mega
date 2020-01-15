@@ -51,7 +51,7 @@ def top_p_logits(logits, p, epsilon=-1e10):
         )
 
 
-def sample_sequence(*, hparams, length, start_token=None, batch_size=None, context=None, temperature=1, top_k=0, top_p=0.0, epsilon=-1e10, penalize=0.85):
+def sample_sequence(*, hparams, length, start_token=None, batch_size=None, context=None, temperature=1, top_k=0, top_p=0.0, epsilon=-1e10, penalize=0.0):
     if start_token is None:
         assert context is not None, 'Specify exactly one of start_token and context!'
     else:
@@ -80,7 +80,8 @@ def sample_sequence(*, hparams, length, start_token=None, batch_size=None, conte
         def body(past, prev, output):
             next_outputs = step(hparams, prev[:, tf.newaxis], past=past)
             logits = next_outputs['logits'][:, -1, :]  / tf.to_float(temperature)
-            logits = penalize_used(logits, output, penalize=penalize)
+            if penalize > 0.0:
+                logits = penalize_used(logits, output, penalize=penalize)
             if top_p > 0.0:
                 logits = top_p_logits(logits, p=top_p, epsilon=epsilon)
             else:
