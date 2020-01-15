@@ -14,6 +14,8 @@ import tflex
 
 import model, sample, encoder
 
+CHECKPOINT_DIR = 'drive/My Drive/checkpoint'
+
 def interact_model(
     model_name='117M',
     restore_from=None,
@@ -77,7 +79,7 @@ def interact_model(
 
         saver = tflex.Saver()
         if restore_from is None:
-          restore_from = os.path.join('models', model_name)
+          restore_from = os.path.join(os.pardir, CHECKPOINT_DIR, "run1"))
         ckpt = tflex.latest_checkpoint(restore_from)
         saver.restore(sess, ckpt)
 
@@ -107,6 +109,8 @@ def interact_model(
                     print("=" * 40 + " SAMPLE " + str(generated) + " " + "=" * 40)
                     sys.stdout.write(raw_text)
                     print(text)
+                    with open(os.path.join(os.pardir, CHECKPOINT_DIR, "conditional_log.txt"), 'a') as f:
+                        f.write(text)
                     sys.stdout.flush()
             print("=" * 80)
 
