@@ -79,7 +79,7 @@ def interact_model(
 
         saver = tflex.Saver()
         if restore_from is None:
-          restore_from = os.path.join(os.pardir, CHECKPOINT_DIR, "run1"))
+          restore_from = os.path.join(os.pardir, CHECKPOINT_DIR, "run1")
         ckpt = tflex.latest_checkpoint(restore_from)
         saver.restore(sess, ckpt)
 
