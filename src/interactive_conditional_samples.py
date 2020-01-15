@@ -17,7 +17,7 @@ import model, sample, encoder
 CHECKPOINT_DIR = 'drive/My Drive/checkpoint'
 
 def interact_model(
-    model_name='117M',
+    model_name='1558M',
     restore_from=None,
     seed=None,
     nsamples=1,
